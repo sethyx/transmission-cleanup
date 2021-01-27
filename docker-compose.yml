@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   transmission-cleanup:
-    image: transmission-cleanup
+    image: sethyx/transmission-cleanup:latest
     build:
       context: .
       dockerfile: ./Dockerfile

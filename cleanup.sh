@@ -10,12 +10,11 @@ while true; do
     # use sed to delete first / last line of output and remove leading spaces
     # use cut to get first field from each line
     TORRENTLIST=`transmission-remote $TRANSMISSION_RPC --list | sed -e '1d;$d;s/^ *//' | cut -s -d " " -f 1`
-    #transmission-remote $TRANSMISSION_RPC --list
 
     # for each torrent in the list
     for TORRENTID in $TORRENTLIST; do
-        echo "Processing torrent #$TORRENTID"
-        #transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info
+        TORRENT_NAME=`transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info | grep -oE 'Name:.+' | cut -f2- -d' '`
+
         # check if we seeded for 2 days
         SEEDING_SECONDS=`transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info | grep "Seeding Time" | grep -oE '[0-9]+ seconds' | cut -f1 -d' ' | tail -1`
 
@@ -25,19 +24,19 @@ while true; do
         # check torrents current state is
         STATE_FINISHED=`transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info | grep "State: Finished"`
 
-        # if the torrent finished downloading AND state is "Stopped", "Finished" OR seeding for 2+ days
+        # if the torrent finished downloading AND state is "Stopped", "Finished" OR seeding for threshold+
         if [ "$DL_COMPLETED" ]; then
             if [ "$STATE_FINISHED" ]; then
-                echo "Torrent #$TORRENTID is completed, removing"
+                echo "Torrent #$TORRENTID ($TORRENT_NAME) is completed, removing"
                 transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --remove-and-delete
             elif [ "$SEEDING_SECONDS" -gt "$SEEDING_THRESHOLD_SECONDS" ]; then
-                echo "Torrent #$TORRENTID has been seeding for more than the defined threshold, marking as finished"
+                echo "Torrent #$TORRENTID ($TORRENT_NAME) has been seeding for more than the defined threshold, marking as finished"
                 transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID -sr 0
             else
-                echo "Torrent #$TORRENTID still in progress, ignoring"
+                echo "Torrent #$TORRENTID ($TORRENT_NAME) still in progress, ignoring"
             fi
         else
-            echo "Torrent #$TORRENTID still in progress, ignoring"
+            echo "Torrent #$TORRENTID ($TORRENT_NAME) still in progress, ignoring"
         fi
     done
 
