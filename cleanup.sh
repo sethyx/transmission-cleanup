@@ -9,20 +9,21 @@ while true; do
     # use transmission-remote to get torrent list
     # use sed to delete first / last line of output and remove leading spaces
     # use cut to get first field from each line
-    TORRENTLIST=`transmission-remote $TRANSMISSION_RPC --list | sed -e '1d;$d;s/^ *//' | cut -s -d " " -f 1`
+    TORRENTLIST=$(transmission-remote $TRANSMISSION_RPC --list | sed -e '1d;$d;s/^ *//' | cut -s -d' ' -f1)
 
     # for each torrent in the list
     for TORRENTID in $TORRENTLIST; do
-        TORRENT_NAME=`transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info | grep -oE 'Name:.+' | cut -f2- -d' '`
+        TORRENT_DETAILS=$(transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info)
+        TORRENT_NAME=$(echo "$TORRENT_DETAILS" | grep -oE 'Name:.+' | cut -d' ' -f2-)
 
-        # check if we seeded for 2 days
-        SEEDING_SECONDS=`transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info | grep "Seeding Time" | grep -oE '[0-9]+ seconds' | cut -f1 -d' ' | tail -1`
+        # check seeding time
+        SEEDING_SECONDS=$(echo "$TORRENT_DETAILS" | grep "Seeding Time:" | grep -oE '[0-9]+ seconds' | cut -d' ' -f1 | tail -1)
 
         # check if torrent download is completed
-        DL_COMPLETED=`transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info | grep "Percent Done: 100%"`
+        DL_COMPLETED=$(echo "$TORRENT_DETAILS" | grep "Percent Done: 100%")
 
         # check torrents current state is
-        STATE_FINISHED=`transmission-remote $TRANSMISSION_RPC --torrent $TORRENTID --info | grep "State: Finished"`
+        STATE_FINISHED=$(echo "$TORRENT_DETAILS" | grep "State: Finished")
 
         # if the torrent finished downloading AND state is "Stopped", "Finished" OR seeding for threshold+
         if [ "$DL_COMPLETED" ]; then
