@@ -1,5 +1,10 @@
 # transmission-cleanup
 
+![GitHub top language](https://img.shields.io/github/languages/top/sethyx/transmission-cleanup)
+[![Docker Build](https://img.shields.io/docker/cloud/build/sethyx/transmission-cleanup.svg)](https://hub.docker.com/repository/docker/sethyx/transmission-cleanup)
+[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/sethyx/transmission-cleanup)](https://hub.docker.com/repository/docker/sethyx/transmission-cleanup)
+![](https://img.shields.io/docker/pulls/sethyx/transmission-cleanup "Total docker pulls")
+
 A simple script to remove torrents from Transmission that have been seeding for a long time.
 
 Please respect the torrent etiquette and don't set the seeding threshold to a low value. You can setup your Transmission to mark torrents as finished once they reached the preferred ratio (1+:1). This script can help removing torrents which are not being leeched anymore and therefore probably won't ever get marked as finished.
@@ -7,11 +12,6 @@ Please respect the torrent etiquette and don't set the seeding threshold to a lo
 ## Supported tags and Dockerfile links
 
 -	[`latest` (*Dockerfile*)](https://github.com/sethyx/transmission-cleanup/blob/main/Dockerfile)
-
-![GitHub top language](https://img.shields.io/github/languages/top/sethyx/transmission-cleanup)
-[![Docker Build](https://img.shields.io/docker/cloud/build/sethyx/transmission-cleanup.svg)](https://hub.docker.com/repository/docker/sethyx/transmission-cleanup)
-[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/sethyx/transmission-cleanup)](https://hub.docker.com/repository/docker/sethyx/transmission-cleanup)
-![](https://img.shields.io/docker/pulls/sethyx/transmission-cleanup "Total docker pulls")
 
 ## How it works
 
