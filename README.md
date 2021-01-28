@@ -34,7 +34,6 @@ services:
       - "TRANSMISSION_RPC_PASSWORD=yourpassword" # optional
       - "RUN_INTERVAL=12" # hours
       - "SEEDING_THRESHOLD=7" # days
-    restart: unless-stopped
 ```
 
 ### docker cli
