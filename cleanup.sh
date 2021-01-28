@@ -5,6 +5,10 @@ SEEDING_THRESHOLD_SECONDS=$(($SEEDING_THRESHOLD_HOURS * 3600))
 
 echo "Starting transmission cleanup, RPC: $TRANSMISSION_RPC, running every $RUN_INTERVAL_MINS minutes, with seeding threshold (hours): $SEEDING_THRESHOLD_HOURS"
 
+if [ "$TRANSMISSION_RPC_AUTH" = true ]; then
+    TRANSMISSION_RPC="$TRANSMISSION_RPC -n $TRANSMISSION_RPC_USER:$TRANSMISSION_RPC_PASSWORD"
+fi
+
 while true; do
     # use transmission-remote to get torrent list
     # use sed to delete first / last line of output and remove leading spaces

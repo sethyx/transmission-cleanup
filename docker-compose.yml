@@ -10,3 +10,6 @@ services:
       - "TRANSMISSION_RPC=HOST:PORT"
       - "RUN_INTERVAL_MINS=60"
       - "SEEDING_THRESHOLD_HOURS=48"
+      - "TRANSMISSION_RPC_AUTH=false" # set to true if using auth
+      - "TRANSMISSION_RPC_USER=youruser" # optional
+      - "TRANSMISSION_RPC_PASSWORD=yourpassword" # optional
